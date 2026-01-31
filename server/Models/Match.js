@@ -30,6 +30,9 @@ const MatchSchema = new mongoose.Schema({
   },
 });
 
+MatchSchema.index({ playedAt: -1 }); // descending order newest to oldest
+MatchSchema.index({ roomId: 1, playedAt: -1 }); // first gets sorted on room id 1 , 2, 3 ,.... then in each id sort from newest to oldest
+
 const Match = mongoose.model("Match", MatchSchema);
 
 export default Match;

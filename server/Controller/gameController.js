@@ -52,3 +52,16 @@ export const validateMove = (board, index, currentTurn, playerSymbol) => {
 
   return { valid: true };
 };
+
+// create fresh game state
+
+export const createGameState = () => {
+  return {
+    board: Array(9).fill(""),
+    currentTurn: "X",
+    gameOver: false,
+    winningLine: null,
+    moves: 0,
+    winner: null,
+  };
+};

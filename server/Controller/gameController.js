@@ -21,4 +21,34 @@ export const checkWinner = (board) => {
       };
     }
   }
+
+  return null; // No winner yet
+};
+
+// check if board is full
+
+export const validateMove = (board, index, currentTurn, playerSymbol) => {
+  if (currentTurn !== playerSymbol) {
+    return {
+      valid: false,
+      error: "Not your turn",
+    };
+  }
+
+  if (board[index] !== "") {
+    return {
+      valid: false,
+      error: "Cell already occupied",
+    };
+  }
+
+  if ((index < 0) | (index > 0)) {
+    //sanity test bug check
+    return {
+      valid: false,
+      error: "Invalid cell index",
+    };
+  }
+
+  return { valid: true };
 };

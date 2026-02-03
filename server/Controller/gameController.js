@@ -26,6 +26,9 @@ export const checkWinner = (board) => {
 };
 
 // check if board is full
+export const isBoardFull = (board) => {
+  return board.every((cell) => cell !== "");
+};
 
 export const validateMove = (board, index, currentTurn, playerSymbol) => {
   if (currentTurn !== playerSymbol) {
@@ -84,8 +87,15 @@ export const processMove = (gameState, index, symbol) => {
     };
   }
 
-  if (moves === 9) {
-    return { ...gameState, board: newBoard, gameOver: true, winner: "draw" };
+  if (isBoardFull(newBoard)) {
+    return {
+      board: newBoard,
+      currentTurn: gameState.currentTurn,
+      gameOver: true,
+      winner: "Draw",
+      winningLine: null,
+      moves,
+    };
   }
 
   return {
@@ -93,6 +103,7 @@ export const processMove = (gameState, index, symbol) => {
     currentTurn: gameState.currentTurn === "X" ? "0" : "X",
     gameOver: false,
     winner: null,
+    winningLine: null,
     moves,
   };
 };

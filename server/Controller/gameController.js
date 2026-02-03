@@ -67,3 +67,32 @@ export const createGameState = () => {
 };
 
 //Process a move and return new state
+export const processMove = (gameState, index, symbol) => {
+  const newBoard = [...gameState.board];
+  newBoard[index] = symbol;
+  const moves = gameState.moves + 1;
+  const winResult = checkWinner(newBoard);
+
+  if (winResult) {
+    return {
+      board: newBoard,
+      currentTurn: gameState.currentTurn,
+      gameOver: true,
+      winner: winResult.winner,
+      winningLine: winResult.line,
+      moves,
+    };
+  }
+
+  if (moves === 9) {
+    return { ...gameState, board: newBoard, gameOver: true, winner: "draw" };
+  }
+
+  return {
+    board: newBoard,
+    currentTurn: gameState.currentTurn === "X" ? "0" : "X",
+    gameOver: false,
+    winner: null,
+    moves,
+  };
+};

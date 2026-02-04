@@ -74,7 +74,31 @@ export const initializeSocketManager = (io) => {
           playerName,
           players: room.players,
         });
-      } catch {}
+
+        //if players are 2 start the game
+        if (room.players.length === 2) {
+          room.started = true;
+
+          io.to(roomId).emit("game_start", {
+            players: room.players,
+            gameState: room.gameState,
+          });
+
+          console.log(`🎯 Game started in room: ${roomId}`);
+        } else {
+          socket.emit("waiting_for_opponent", {
+            // Only 1 player so far - tell them to wait
+            message: "Waiting for opponent to join...",
+          });
+        }
+      } catch (error) {
+        console.log("Error joining the room");
+        socket.emit("room_error", {
+          message: "Error occured while joining the room please try again",
+        });
+      }
     });
+
+    //Event 2 players makes a move
   });
 };

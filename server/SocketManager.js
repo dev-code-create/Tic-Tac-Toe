@@ -30,13 +30,38 @@ export const initializeSocketManager = (io) => {
           gameRooms.set(roomId, room);
           console.log(`🆕 created new room: ${roomId}`);
         }
+
         //Check if room is full(max 2 players)
         if (room.players.length() >= 2) {
           (socket.emit("room_error"),
             {
               message: "Room is full. Please Join a different room",
             });
+          return; // stops so function immediately so that the third person cant join accidently
         }
+
+        //if playerName already taken in this room
+        const existingPlayer = room.players.find((p) => p.name === playerName);
+        if (existingPlayer) {
+          socket.emit("room_error", {
+            message: "A player with this name already exists in the room",
+          });
+          return;
+        }
+
+        const symbol = room.players.lemgth === 0 ? "X" : "0";
+
+        const player = {
+          id: socket.id,
+          name: playerName,
+          symbol,
+        };
+
+        //add player to the room
+        room.players.push(player);
+
+        //join the socket.io room
+        socket.join(roomId);
       } catch {}
     });
   });

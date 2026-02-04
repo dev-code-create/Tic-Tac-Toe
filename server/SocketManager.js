@@ -62,6 +62,18 @@ export const initializeSocketManager = (io) => {
 
         //join the socket.io room
         socket.join(roomId);
+
+        socket.data.roomId = roomId;
+        socket.data.playerName = playerName;
+        socket.data.symbol = symbol;
+
+        //tell the player they successgully joined
+        socket.emit("room_joined", {
+          roomId,
+          playerSymbol: symbol,
+          playerName,
+          players: room.players,
+        });
       } catch {}
     });
   });

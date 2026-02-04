@@ -100,5 +100,37 @@ export const initializeSocketManager = (io) => {
     });
 
     //Event 2 players makes a move
+    (socket.on("make_move"),
+      async ({ roomId, index }) => {
+        try {
+          const room = gameRooms.get(roomId);
+
+          //validate checks
+          if (!room) {
+            socket.emit("move_error", { message: "Room not found" });
+            return;
+          }
+
+          if (!room.started) {
+            socket.emit("move_error", {
+              message: "Game has not started yet",
+            });
+          }
+
+          if (room.gameState.gameOver) {
+            socket.emit("move_error", {
+              message: "Game is already over",
+            });
+          }
+
+          const player = room.players.find((p) => p.id === socket.id);
+
+          if (!player) {
+            socket.emit("move_error", {
+              message: "Player not found in room",
+            });
+          }
+        } catch (error) {}
+      });
   });
 };

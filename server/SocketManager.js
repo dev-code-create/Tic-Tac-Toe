@@ -130,6 +130,28 @@ export const initializeSocketManager = (io) => {
               message: "Player not found in room",
             });
           }
+
+          const validation = validateMove(
+            room.gameState.board,
+            index,
+            room.gameState.currentTurn,
+            player.symbol,
+          );
+
+          if (!validation.valid) {
+            socket.emit("move_error", {
+              message: validation.error,
+            });
+            return;
+          }
+
+          const newGameState = processMove(
+            room.gameState,
+            index,
+            player.symbol,
+          );
+
+          room.gameState = newGameState;
         } catch (error) {}
       });
   });

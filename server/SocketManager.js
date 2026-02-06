@@ -152,6 +152,36 @@ export const initializeSocketManager = (io) => {
           );
 
           room.gameState = newGameState;
+
+          (io.to(roomId).emit("game_update"),
+            {
+              gameState: newGameState,
+              lastMove: {
+                index,
+                symbol: player.symbol,
+                playerName: player.name,
+              },
+            });
+
+          if (newGameState.gameOver) {
+            console.log(
+              `🏆 Game over in room ${roomId}. Winner: ${newGameState.winner}`,
+            );
+
+            try{
+              const matchData = {
+                roomId,
+                winner: newGameState.winner,
+                players:room.players.map(p=>({
+                  name: p.name,
+                  symbol:p.symbol
+                })),
+                moves:p.symbol
+              };
+
+              const match = new Match(matchData);
+            }
+          }
         } catch (error) {}
       });
   });

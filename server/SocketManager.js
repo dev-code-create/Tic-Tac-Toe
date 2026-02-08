@@ -182,7 +182,9 @@ export const initializeSocketManager = (io) => {
               const match = new Match(matchData);
             }
           }
-        } catch (error) {}
+        } catch (error) {
+          //error
+        }
       });
   });
 };

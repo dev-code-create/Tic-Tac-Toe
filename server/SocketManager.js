@@ -168,23 +168,53 @@ export const initializeSocketManager = (io) => {
               `🏆 Game over in room ${roomId}. Winner: ${newGameState.winner}`,
             );
 
-            try{
+            try {
               const matchData = {
                 roomId,
                 winner: newGameState.winner,
-                players:room.players.map(p=>({
+                players: room.players.map((p) => ({
                   name: p.name,
-                  symbol:p.symbol
+                  symbol: p.symbol,
                 })),
-                moves:p.symbol
+                moves: newGameState.moves,
               };
 
               const match = new Match(matchData);
+              await match.save();
+
+              console.log(`💾 Match saved to database`);
+            } catch (dbError) {
+              console.error("Error saving match to database:", dbError);
             }
           }
         } catch (error) {
-          //error
+          console.error("Error processing move:", error);
+          socket.emit("move_error", {
+            message: "An error occurred while processing your move.",
+          });
         }
       });
+
+    //Reset game
+    socket.on("reset_game", ({ roomId }) => {
+      try {
+        const room = gameRooms.get(roomId);
+        if (!room) {
+          socket.emit("room_error", { message: "Room not Found" });
+          return;
+        }
+
+        room.gameState = createGameState();
+
+        (io.to(roomId),
+          emit("game_reset", {
+            gameState: room.gameState,
+          }));
+
+        console.log(`🔄 Game reset in room: ${roomId}`);
+      } catch (error) {
+        console.error("Error resetting game:", error);
+      }
+    });
   });
 };

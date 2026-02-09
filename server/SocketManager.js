@@ -216,5 +216,21 @@ export const initializeSocketManager = (io) => {
         console.error("Error resetting game:", error);
       }
     });
+
+    //event 4 player disconnect
+
+    socket.on("disconnect", () => {
+      console.log(`👋 Player disconnected: ${socket.id}`);
+
+      const roomId = socket.data.roomId;
+
+      if (roomId) {
+        const room = gameRooms.get(roomId);
+
+        if (room) {
+          room.players = room.players.filter((p) => p.id !== socket.id);
+        }
+      }
+    });
   });
 };

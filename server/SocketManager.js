@@ -245,5 +245,24 @@ export const initializeSocketManager = (io) => {
         }
       }
     });
+
+    //Event 5: get room history
+    socket.on("get_room_history", async ({ roomId }) => {
+      try {
+        const matches = await Match.find({ roomId })
+          .sort({ playedAt: -1 })
+          .limit(10)
+          .lean();
+
+        socket.emit("room_history", { matches });
+      } catch (error) {
+        console.error("Error fetching room history", error);
+        socket.emit("room_error", {
+          message: "Could not fetch room history",
+        });
+      }
+    });
   });
+
+  console.log("🎮 Socket.io manager initialized");
 };

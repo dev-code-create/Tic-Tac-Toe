@@ -229,6 +229,19 @@ export const initializeSocketManager = (io) => {
 
         if (room) {
           room.players = room.players.filter((p) => p.id !== socket.id);
+
+          socket.to(roomId).emit("player_disconnected", {
+            message: "Your opponent has disconnected.",
+          });
+
+          if (room.players.length === 0) {
+            gameRooms.delete(roomId);
+            console.log(`🗑️  Room ${roomId} deleted (empty)`);
+          } else {
+            // Reset game for remaining player
+            room.started = false;
+            room.gameState = createGameState();
+          }
         }
       }
     });

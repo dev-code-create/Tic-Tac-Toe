@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev":"nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +14,7 @@
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
-    "exprss": "^0.0.1-security",
+    "express": "^5.2.1",
     "mongoose": "^9.1.5",
     "socket.io": "^4.8.3"
   },

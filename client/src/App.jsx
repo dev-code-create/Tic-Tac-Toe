@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import { initSocket, getSocket } from "../utils/socket";
+import Lobby from "./components/Lobby";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [gamePhase, setGamePhase] = useState("lobby");
+  const [roomId, setRoomId] = useState("");
+  const [playerName, setPlayerName] = useState("");
+  const [playerSymbol, setPlayerSymbol] = useState("");
+  const [players, setPlayers] = useState([]);
+  const [gameState, setGameState] = useState({
+    board: Array(9).fill(""),
+    currentTurn: "X",
+    gameOver: false,
+    winner: null,
+    winningLine: null,
+    moves: 0,
+  });
+  const [error, setError] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-deep-indigo text-white">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-electric-pink rounded-full blur-3xl opacity-10 animate-float"></div>
+        <div></div>
+        <div></div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

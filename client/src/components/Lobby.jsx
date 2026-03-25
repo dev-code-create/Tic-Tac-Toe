@@ -28,7 +28,21 @@ const lobby = ({ onJoinRoom }) => {
     onJoinRoom(finalRoomId, playerName.trim());
   };
 
-  return <motion.div></motion.div>;
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="min-h-screen flex items-center justify-center p-4"
+    >
+      <div className="w-full max-w-md">
+        //Title
+        <motion.div
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        ></motion.div>
+      </div>
+    </motion.div>
+  );
 };
 
 export default lobby;

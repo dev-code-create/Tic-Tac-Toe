@@ -32,9 +32,7 @@ function App() {
         ></div>
       </div>
 
-      <div className="relative z-10">
-        {gamePhase === "lobby" && <Lobby onJoinRoom={handleJoinRoom} />}
-      </div>
+      <div className="relative z-10">{gamePhase === "lobby" && <Lobby />}</div>
     </div>
   );
 }

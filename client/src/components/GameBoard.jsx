@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Toast from "./Toast";
+import Logo from "./Logo";
 
 const GameBoard = ({
   gameState,
@@ -57,11 +58,14 @@ const GameBoard = ({
             animate={{ x: 0, opacity: 1 }}
             className="flex flex-col gap-8"
           >
-            <div className="space-y-2">
-              <h1 className="font-display text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-electric-pink via-neon-purple to-neon-cyan leading-tight">
-                NEO-TIC <br />
-                TAC TOE
-              </h1>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Logo className="w-16 h-16 md:w-20 md:h-20" animated={false} />
+                <h1 className="font-display text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-electric-pink via-neon-purple to-neon-cyan leading-tight">
+                  NEO-TIC <br />
+                  TAC TOE
+                </h1>
+              </div>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                 <div className="w-2 h-2 rounded-full bg-neon-yellow animate-pulse" />
                 <button

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Toast from "./Toast";
+import Logo from "./Logo";
 
 const WaitingRoom = ({ roomId, playerName }) => {
   const [toast, setToast] = useState({ show: false, message: "", type: "success" });
@@ -35,7 +36,8 @@ const WaitingRoom = ({ roomId, playerName }) => {
       >
         <div className="flex w-full max-w-xl flex-col items-center gap-10">
           {/* Animated Logo */}
-          <motion.div className="mb-2">
+          <motion.div className="mb-2 flex flex-col items-center gap-4">
+            <Logo className="w-24 h-24 md:w-32 md:h-32" />
             <div className="inline-block">
               <motion.h1
                 animate={{

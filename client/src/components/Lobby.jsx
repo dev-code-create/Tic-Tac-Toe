@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Logo from "./Logo";
 
 const Lobby = ({ onJoinRoom }) => {
   const [playerName, setPlayerName] = useState("");
@@ -41,14 +42,17 @@ const Lobby = ({ onJoinRoom }) => {
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-          className="mb-12 text-center"
+          className="mb-12 text-center flex flex-col items-center gap-6"
         >
-          <h1 className="mb-4 bg-linear-to-r from-electric-pink via-neon-purple to-neon-cyan bg-clip-text font-display text-5xl font-bold leading-none text-transparent animate-glow-pulse md:text-6xl">
-            Tic Tac Toe
-          </h1>
-          <p className="font-body text-lg text-neon-yellow/90 md:text-xl">
-            Play online
-          </p>
+          <Logo className="w-32 h-32 md:w-40 md:h-40" />
+          <div>
+            <h1 className="mb-4 bg-linear-to-r from-electric-pink via-neon-purple to-neon-cyan bg-clip-text font-display text-5xl font-bold leading-none text-transparent animate-glow-pulse md:text-6xl">
+              Tic Tac Toe
+            </h1>
+            <p className="font-body text-lg text-neon-yellow/90 md:text-xl">
+              Play online
+            </p>
+          </div>
         </motion.div>
 
         {/* Form card */}

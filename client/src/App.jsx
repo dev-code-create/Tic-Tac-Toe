@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { initSocket, getSocket } from "../utils/socket";
 import Lobby from "./components/Lobby";
+import WaitingRoom from "./components/WaitingRoom";
 
 function App() {
   const [gamePhase, setGamePhase] = useState("lobby");
@@ -32,7 +33,9 @@ function App() {
         ></div>
       </div>
 
-      <div className="relative z-10">{gamePhase === "lobby" && <Lobby />}</div>
+      {/* <div className="relative z-10">{gamePhase === "lobby" && <Lobby />}</div> */}
+
+      <WaitingRoom roomId={roomId} playerName={playerName} />
     </div>
   );
 }

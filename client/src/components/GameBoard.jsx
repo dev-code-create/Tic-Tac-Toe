@@ -1,4 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import Toast from "./Toast";
 
 const GameBoard = ({
   gameState,
@@ -30,6 +32,17 @@ const GameBoard = ({
     return winningLine && winningLine.includes(index);
   };
 
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  const copyRoomId = () => {
+    navigator.clipboard.writeText(roomId);
+    setToast({
+      show: true,
+      message: "Room ID copied!",
+      type: "success"
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-dark-purple/30 backdrop-blur-[2px]">
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -47,7 +60,13 @@ const GameBoard = ({
               </h1>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                 <div className="w-2 h-2 rounded-full bg-neon-yellow animate-pulse" />
-                <span className="font-display text-xs tracking-widest text-neon-yellow uppercase">Room: {roomId}</span>
+                <button 
+                  onClick={copyRoomId}
+                  className="font-display text-xs tracking-widest text-neon-yellow uppercase hover:text-white transition-colors cursor-pointer"
+                  title="Click to copy Room ID"
+                >
+                  Room: {roomId}
+                </button>
               </div>
             </div>
 
@@ -273,6 +292,12 @@ const GameBoard = ({
         <div className="w-1 h-1 rounded-full bg-white/20" />
         <span>v2.0.4-Neo</span>
       </motion.div>
+      <Toast 
+        isVisible={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 };

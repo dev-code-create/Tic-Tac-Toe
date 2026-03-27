@@ -3,6 +3,7 @@ import { initSocket, getSocket } from "../utils/socket";
 import Lobby from "./components/Lobby";
 import WaitingRoom from "./components/WaitingRoom";
 import GameBoard from "./components/GameBoard";
+import Toast from "./components/Toast";
 
 function App() {
   // Game phase: 'lobby' -> 'waiting' -> 'playing'
@@ -19,7 +20,11 @@ function App() {
     winningLine: null,
     moves: 0,
   });
-  const [error, setError] = useState("");
+  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+  };
 
   useEffect(() => {
     // Initialize socket connection when app loads
@@ -42,6 +47,9 @@ function App() {
         // If only 1 player, show waiting screen
         if (players.length === 1) {
           setGamePhase("waiting");
+          showToast(`Welcome ${playerName}! Room created.`, "success");
+        } else {
+          showToast(`Successfully joined room ${roomId}!`, "success");
         }
       },
     );
@@ -52,6 +60,7 @@ function App() {
       setPlayers(players);
       setGameState(gameState);
       setGamePhase("playing");
+      showToast("Game started! Good luck.", "info");
     });
 
     // Game state updated (move was made)
@@ -64,6 +73,7 @@ function App() {
     socket.on("game_reset", ({ gameState }) => {
       console.log("Game reset");
       setGameState(gameState);
+      showToast("Game has been reset.", "info");
     });
 
     // Waiting for opponent to join
@@ -75,21 +85,20 @@ function App() {
     // Error joining room
     socket.on("room_error", ({ message }) => {
       console.error("Room error:", message);
-      setError(message);
-      alert(message);
+      showToast(message, "error");
       setGamePhase("lobby");
     });
 
     // Error making a move
     socket.on("move_error", ({ message }) => {
       console.error("Move error:", message);
-      alert(message);
+      showToast(message, "error");
     });
 
     // Opponent disconnected
     socket.on("player_disconnected", ({ message }) => {
       console.log("Player disconnected");
-      alert(message);
+      showToast(message, "error");
       setGamePhase("waiting");
     });
 
@@ -165,6 +174,13 @@ function App() {
           />
         )}
       </div>
+
+      <Toast 
+        isVisible={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 }

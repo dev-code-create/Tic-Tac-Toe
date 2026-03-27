@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const lobby = ({ onJoinRoom }) => {
+const Lobby = ({ onJoinRoom }) => {
   const [playerName, setPlayerName] = useState("");
   const [roomId, setRoomId] = useState("");
-  const [isCreating, setIsCreating] = useState("");
+  const [isCreating, setIsCreating] = useState(true);
 
   const generateRoomId = () => {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -15,6 +15,7 @@ const lobby = ({ onJoinRoom }) => {
 
     if (!playerName.trim()) {
       alert("Please enter your name");
+      return;
     }
 
     const finalRoomId = isCreating
@@ -159,4 +160,4 @@ const lobby = ({ onJoinRoom }) => {
   );
 };
 
-export default lobby;
+export default Lobby;

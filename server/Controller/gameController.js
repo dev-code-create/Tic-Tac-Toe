@@ -45,7 +45,7 @@ export const validateMove = (board, index, currentTurn, playerSymbol) => {
     };
   }
 
-  if ((index < 0) | (index > 0)) {
+  if (index < 0 || index >= 9) {
     //sanity test bug check
     return {
       valid: false,
@@ -100,7 +100,7 @@ export const processMove = (gameState, index, symbol) => {
 
   return {
     board: newBoard,
-    currentTurn: gameState.currentTurn === "X" ? "0" : "X",
+    currentTurn: gameState.currentTurn === "X" ? "O" : "X",
     gameOver: false,
     winner: null,
     winningLine: null,

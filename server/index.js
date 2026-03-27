@@ -45,11 +45,11 @@ app.get("/health", (req, res) => {
 app.get("/api/matches/recent", async (req, res) => {
   try {
     const Match = mongoose.model("Match");
-    const match = (await Match.find())
-      .toSorted({ playedAt: -1 })
+    const matches = await Match.find()
+      .sort({ playedAt: -1 })
       .limit(20)
       .lean();
-    res.json({ sucess: true, matches });
+    res.json({ success: true, matches });
   } catch (error) {
     console.error("Error Fetching Matches", error);
     res.status(500).json({

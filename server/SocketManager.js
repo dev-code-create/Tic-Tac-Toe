@@ -32,11 +32,10 @@ export const initializeSocketManager = (io) => {
         }
 
         //Check if room is full(max 2 players)
-        if (room.players.length() >= 2) {
-          (socket.emit("room_error"),
-            {
-              message: "Room is full. Please Join a different room",
-            });
+        if (room.players.length >= 2) {
+          socket.emit("room_error", {
+            message: "Room is full. Please join a different room",
+          });
           return; // stops so function immediately so that the third person cant join accidently
         }
 
@@ -49,7 +48,7 @@ export const initializeSocketManager = (io) => {
           return;
         }
 
-        const symbol = room.players.lemgth === 0 ? "X" : "0";
+        const symbol = room.players.length === 0 ? "X" : "O";
 
         const player = {
           id: socket.id,
@@ -100,8 +99,7 @@ export const initializeSocketManager = (io) => {
     });
 
     //Event 2 players makes a move
-    (socket.on("make_move"),
-      async ({ roomId, index }) => {
+    socket.on("make_move", async ({ roomId, index }) => {
         try {
           const room = gameRooms.get(roomId);
 
@@ -115,12 +113,14 @@ export const initializeSocketManager = (io) => {
             socket.emit("move_error", {
               message: "Game has not started yet",
             });
+            return;
           }
 
           if (room.gameState.gameOver) {
             socket.emit("move_error", {
               message: "Game is already over",
             });
+            return;
           }
 
           const player = room.players.find((p) => p.id === socket.id);
@@ -129,6 +129,7 @@ export const initializeSocketManager = (io) => {
             socket.emit("move_error", {
               message: "Player not found in room",
             });
+            return;
           }
 
           const validation = validateMove(
@@ -153,15 +154,14 @@ export const initializeSocketManager = (io) => {
 
           room.gameState = newGameState;
 
-          (io.to(roomId).emit("game_update"),
-            {
-              gameState: newGameState,
-              lastMove: {
-                index,
-                symbol: player.symbol,
-                playerName: player.name,
-              },
-            });
+          io.to(roomId).emit("game_update", {
+            gameState: newGameState,
+            lastMove: {
+              index,
+              symbol: player.symbol,
+              playerName: player.name,
+            },
+          });
 
           if (newGameState.gameOver) {
             console.log(
@@ -206,10 +206,9 @@ export const initializeSocketManager = (io) => {
 
         room.gameState = createGameState();
 
-        (io.to(roomId),
-          emit("game_reset", {
-            gameState: room.gameState,
-          }));
+        io.to(roomId).emit("game_reset", {
+          gameState: room.gameState,
+        });
 
         console.log(`🔄 Game reset in room: ${roomId}`);
       } catch (error) {

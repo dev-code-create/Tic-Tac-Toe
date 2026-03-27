@@ -32,35 +32,39 @@ const GameBoard = ({
     return winningLine && winningLine.includes(index);
   };
 
-  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   const copyRoomId = () => {
     navigator.clipboard.writeText(roomId);
     setToast({
       show: true,
       message: "Room ID copied!",
-      type: "success"
+      type: "success",
     });
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-dark-purple/30 backdrop-blur-[2px]">
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        
         {/* Left Side: Game Info & Players */}
-        <div className="lg:col-span-5 flex flex-col gap-6 order-2 lg:order-1">
+        <div className="lg:col-span-5 flex flex-col gap-10 order-2 lg:order-1">
           <motion.div
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="space-y-6"
+            className="flex flex-col gap-8"
           >
             <div className="space-y-2">
               <h1 className="font-display text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-electric-pink via-neon-purple to-neon-cyan leading-tight">
-                NEO-TIC <br />TAC TOE
+                NEO-TIC <br />
+                TAC TOE
               </h1>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
                 <div className="w-2 h-2 rounded-full bg-neon-yellow animate-pulse" />
-                <button 
+                <button
                   onClick={copyRoomId}
                   className="font-display text-xs tracking-widest text-neon-yellow uppercase hover:text-white transition-colors cursor-pointer"
                   title="Click to copy Room ID"
@@ -75,14 +79,14 @@ const GameBoard = ({
               {players.map((player) => {
                 const isActive = player.symbol === currentTurn && !gameOver;
                 const isClient = player.symbol === playerSymbol;
-                
+
                 return (
                   <motion.div
                     key={player.symbol}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className={`relative overflow-hidden p-5 rounded-[22px] border-2 transition-all duration-500 backdrop-blur-xl ${
-                      isActive 
+                      isActive
                         ? player.symbol === "X"
                           ? "border-electric-pink shadow-neon-pink bg-electric-pink/10"
                           : "border-neon-cyan shadow-neon-cyan bg-neon-cyan/10"
@@ -90,31 +94,39 @@ const GameBoard = ({
                     }`}
                   >
                     {isActive && (
-                      <motion.div 
+                      <motion.div
                         layoutId="active-glow"
                         className={`absolute inset-0 opacity-20 bg-linear-to-br ${
-                          player.symbol === "X" ? "from-electric-pink/40 to-transparent" : "from-neon-cyan/40 to-transparent"
+                          player.symbol === "X"
+                            ? "from-electric-pink/40 to-transparent"
+                            : "from-neon-cyan/40 to-transparent"
                         }`}
                       />
                     )}
-                    
+
                     <div className="relative z-10 flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-display text-2xl font-black ${
-                          player.symbol === "X" ? "bg-electric-pink text-white" : "bg-neon-cyan text-dark-purple"
-                        }`}>
+                        <div
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center font-display text-2xl font-black ${
+                            player.symbol === "X"
+                              ? "bg-electric-pink text-white"
+                              : "bg-neon-cyan text-dark-purple"
+                          }`}
+                        >
                           {player.symbol}
                         </div>
                         <div>
                           <p className="font-display text-lg font-bold text-white tracking-wide">
                             {player.name}
                           </p>
-                          <p className={`font-body text-xs font-medium uppercase tracking-widest ${isClient ? "text-neon-yellow" : "text-white/40"}`}>
+                          <p
+                            className={`font-body text-xs font-medium uppercase tracking-widest ${isClient ? "text-neon-yellow" : "text-white/40"}`}
+                          >
                             {isClient ? "You" : "Opponent"}
                           </p>
                         </div>
                       </div>
-                      
+
                       {isActive && (
                         <motion.div
                           animate={{ scale: [1, 1.2, 1] }}
@@ -131,7 +143,7 @@ const GameBoard = ({
             </div>
 
             {/* Status / Message Box */}
-            <motion.div 
+            <motion.div
               className="p-6 rounded-[22px] bg-white/5 border border-white/10 backdrop-blur-md"
               layout
             >
@@ -144,16 +156,26 @@ const GameBoard = ({
                     exit={{ opacity: 0, y: -10 }}
                     className="space-y-4"
                   >
-                    <div className={`font-display text-2xl font-black italic tracking-tighter ${
-                      winner === "Draw" ? "text-neon-yellow" : winner === playerSymbol ? "text-neon-cyan" : "text-electric-pink"
-                    }`}>
-                      {winner === "Draw" ? ">>> STALEMATE <<<" : winner === playerSymbol ? ">>> VICTORY IS YOURS <<<" : ">>> DEFEAT <<<"}
+                    <div
+                      className={`font-display text-2xl font-black italic tracking-tighter ${
+                        winner === "Draw"
+                          ? "text-neon-yellow"
+                          : winner === playerSymbol
+                            ? "text-neon-cyan"
+                            : "text-electric-pink"
+                      }`}
+                    >
+                      {winner === "Draw"
+                        ? ">>> STALEMATE <<<"
+                        : winner === playerSymbol
+                          ? ">>> VICTORY IS YOURS <<<"
+                          : ">>> DEFEAT <<<"}
                     </div>
                     <p className="font-body text-white/60 text-sm leading-relaxed">
-                      {winner === "Draw" 
-                        ? "Both powers are equally matched. The cycle continues." 
-                        : winner === playerSymbol 
-                          ? "Outstanding performance. You have conquered the grid." 
+                      {winner === "Draw"
+                        ? "Both powers are equally matched. The cycle continues."
+                        : winner === playerSymbol
+                          ? "Outstanding performance. You have conquered the grid."
                           : `${getWinnerPlayer()?.name} has outmaneuvered you this time.`}
                     </p>
                     <div className="flex gap-3 pt-2">
@@ -166,10 +188,10 @@ const GameBoard = ({
                         REMATCH
                       </motion.button>
                       <motion.button
-                         whileHover={{ scale: 1.02 }}
-                         whileTap={{ scale: 0.98 }}
-                         onClick={() => window.location.reload()}
-                         className="px-6 border-2 border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all rounded-xl"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => window.location.reload()}
+                        className="px-6 border-2 border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all rounded-xl"
                       >
                         <span className="sr-only">Leave</span>
                         🚪
@@ -183,16 +205,23 @@ const GameBoard = ({
                     animate={{ opacity: 1 }}
                     className="flex flex-col gap-2"
                   >
-                    <p className="font-display text-xs font-bold text-white/40 uppercase tracking-[0.3em]">Status Protocol</p>
+                    <p className="font-display text-xs font-bold text-white/40 uppercase tracking-[0.3em]">
+                      Status Protocol
+                    </p>
                     <div className="font-display text-xl font-bold text-white">
                       {isMyTurn ? (
                         <span className="flex items-center gap-2">
-                          <span className="text-neon-cyan">Initiating</span> 
-                          <span className="px-2 py-0.5 rounded bg-neon-cyan/20 text-neon-cyan text-sm">Targeting...</span>
+                          <span className="text-neon-cyan">Initiating</span>
+                          <span className="px-2 py-0.5 rounded bg-neon-cyan/20 text-neon-cyan text-sm">
+                            Targeting...
+                          </span>
                         </span>
                       ) : (
                         <span className="flex items-center gap-2 text-white/60">
-                          Waiting for <span className="text-electric-pink italic">{getCurrentPlayer()?.name}</span>
+                          Waiting for{" "}
+                          <span className="text-electric-pink italic">
+                            {getCurrentPlayer()?.name}
+                          </span>
                         </span>
                       )}
                     </div>
@@ -213,24 +242,28 @@ const GameBoard = ({
           >
             {/* Grid Background Patterns */}
             <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--color-neon-purple)_1px,transparent_1px)] bg-size-[24px_24px]" />
+              <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--color-neon-purple)_1px,transparent_1px)] bg-size-[24px_24px]" />
             </div>
 
             <div className="relative grid grid-cols-3 gap-4 p-4 md:p-6 bg-dark-purple/40 rounded-[28px] border border-white/5">
               {board.map((cell, index) => {
                 const winning = isWinningCell(index);
                 const canClick = isMyTurn && cell === "" && !gameOver;
-                
+
                 return (
                   <motion.button
                     key={index}
                     onClick={() => handleCellClick(index)}
                     disabled={!canClick}
-                    whileHover={canClick ? { 
-                      scale: 1.02, 
-                      backgroundColor: "rgba(255,255,255,0.05)",
-                      borderColor: "rgba(255,255,255,0.2)"
-                    } : {}}
+                    whileHover={
+                      canClick
+                        ? {
+                            scale: 1.02,
+                            backgroundColor: "rgba(255,255,255,0.05)",
+                            borderColor: "rgba(255,255,255,0.2)",
+                          }
+                        : {}
+                    }
                     whileTap={canClick ? { scale: 0.95 } : {}}
                     className={`relative aspect-square w-20 h-20 md:w-28 md:h-28 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 ${
                       winning
@@ -245,10 +278,14 @@ const GameBoard = ({
                         <motion.div
                           initial={{ scale: 0, opacity: 0, rotate: 45 }}
                           animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 20,
+                          }}
                           className={`font-display text-5xl md:text-7xl font-black ${
-                            cell === "X" 
-                              ? "text-electric-pink drop-shadow-[0_0_10px_rgba(255,0,127,0.8)]" 
+                            cell === "X"
+                              ? "text-electric-pink drop-shadow-[0_0_10px_rgba(255,0,127,0.8)]"
                               : "text-neon-cyan drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]"
                           }`}
                         >
@@ -259,11 +296,13 @@ const GameBoard = ({
 
                     {/* Winning Strike Connection Line (Abstracted) */}
                     {winning && (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className={`absolute inset-0 rounded-2xl border-4 ${
-                          cell === "X" ? "border-electric-pink" : "border-neon-cyan"
+                          cell === "X"
+                            ? "border-electric-pink"
+                            : "border-neon-cyan"
                         } animate-pulse`}
                       />
                     )}
@@ -271,20 +310,19 @@ const GameBoard = ({
                 );
               })}
             </div>
-            
+
             {/* Decals */}
             <div className="absolute -top-1 -left-1 w-8 h-8 border-t-2 border-l-2 border-neon-yellow opacity-40" />
             <div className="absolute -bottom-1 -right-1 w-8 h-8 border-b-2 border-r-2 border-neon-yellow opacity-40" />
           </motion.div>
         </div>
-
       </div>
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="fixed bottom-6 flex items-center gap-6 text-[10px] font-display font-medium text-white/30 uppercase tracking-[0.4em]"
+        className="fixed bottom-6 left-8 hidden md:flex items-center gap-6 text-[10px] font-display font-medium text-white/30 uppercase tracking-[0.4em]"
       >
         <span>Secure Connection Established</span>
         <div className="w-1 h-1 rounded-full bg-white/20" />
@@ -292,7 +330,7 @@ const GameBoard = ({
         <div className="w-1 h-1 rounded-full bg-white/20" />
         <span>v2.0.4-Neo</span>
       </motion.div>
-      <Toast 
+      <Toast
         isVisible={toast.show}
         message={toast.message}
         type={toast.type}

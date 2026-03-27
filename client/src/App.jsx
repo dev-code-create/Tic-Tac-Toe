@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { initSocket, getSocket } from "../utils/socket";
 import Lobby from "./components/Lobby";
 import WaitingRoom from "./components/WaitingRoom";
@@ -20,7 +21,11 @@ function App() {
     winningLine: null,
     moves: 0,
   });
-  const [toast, setToast] = useState({ show: false, message: "", type: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   const showToast = (message, type = "success") => {
     setToast({ show: true, message, type });
@@ -175,12 +180,28 @@ function App() {
         )}
       </div>
 
-      <Toast 
+      <Toast
         isVisible={toast.show}
         message={toast.message}
         type={toast.type}
         onClose={() => setToast({ ...toast, show: false })}
       />
+
+      {/* Credits */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.5 }}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2"
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-electric-pink shadow-neon-pink animate-pulse" />
+        <span className="font-display text-[10px] tracking-[0.2em] text-white/40 uppercase">
+          Created by{" "}
+          <span className="text-white/70 hover:text-electric-pink transition-colors cursor-default">
+            Ayush
+          </span>
+        </span>
+      </motion.div>
     </div>
   );
 }
